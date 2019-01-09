@@ -1,0 +1,331 @@
+* .Xdefaults
+
+XTerm*metaSendsEscape: true
+XTerm*eightBitInput: false
+XTerm*faceName:xft:monospace:pixelsize=21
+* .screenrc
+
+ defbce on
+ defutf8 on
+ escape ^]^]
+# escape ^`^`
+ markkeys "h=^B:l=^F:$=^E"
+ setenv LANG en_US.UTF-8
+ startup_message off
+ term $TERM
+ termcapinfo xterm|xterms|xs|rxvt ti@:te@
+ zmodem catch
+
+# stolen from the internet
+
+ startup_message off
+# screen does not understand the prefix "C-" to mean control. Please use the
+# caret notation ("^A" instead of "C-a") as arguments to e.g. the escape command
+# or the -e option. screen will also print out control characters in caret
+# notation.
+
+
+# Key            Action                    Notes
+# Ctrl+a c       new window                 
+# Ctrl+a n       next window               I bind F12 to this
+# Ctrl+a p       previous window           I bind F11 to this
+# Ctrl+a "       select window from list   I have window list in the status line
+# Ctrl+a Ctrl+a  previous window viewed     
+                                          
+# Ctrl+a S       split terminal            Ctrl+a c to create new window there
+#                horizontally into regions
+# Ctrl+a |       split terminal vertically Requires screen >= 4.1
+#                into regions
+# Ctrl+a :resize resize region              
+# Ctrl+a :fit    fit screen size to new    Ctrl+a F is the same. Do after
+#                terminal size             resizing xterm
+# Ctrl+a :remove remove region             Ctrl+a X is the same
+# Ctrl+a tab     Move to next region        
+                                          
+# Ctrl+a d       detach screen from        Start screen with -r option to
+#                terminal                  reattach
+# Ctrl+a A       set window title           
+# Ctrl+a x       lock session              Enter user password to unlock
+# Ctrl+a [       enter scrollback/copy     Enter to start and end copy region.
+#                mode                      Ctrl+a ] to leave this mode
+# Ctrl+a ]       paste buffer              Supports pasting between windows
+# Ctrl+a >       write paste buffer to     useful for copying between screens
+#                file
+# Ctrl+a <       read paste buffer from    useful for pasting between screens
+#                file
+                                          
+# Ctrl+a ?       show key bindings/command Note unbound commands only in man page
+#                names
+# Ctrl+a :       goto screen command       up shows last command entered
+#                prompt
+
+
+* XTerm
+
+XTerm*Background: black
+XTerm*Foreground: white
+XTerm*saveLines: 1000
+XTerm*HiForeColor: yellow
+XTerm*geometry: +50+100
+XTerm*metaSendsEscape: true
+
+
+* .emacs
+
+					;start package.el with emacs
+(require 'package)
+                                        ; add melpa to repository list
+
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+;; idk a lot of the auto-complete messes up my yasnippets thing
+;; ;; start auto-complete with emacs
+;; (require 'auto-complete)
+;; ;; do default config for auto-complete
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+;; ;; lets define a function which initializes auto-complete-c-headers and gets called for c/c++ hooks
+;; (defun my:ac-header-init()
+;;   (require 'auto-complete-c-headers)
+;;   (add-to-list 'ac-sources 'ac-source-c-headers)
+;;   (add-to-list 'achead:include-directories "/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.1/../../../../include/c++/7.3.1")
+;;   )
+;; ;; now let us call this function from c/c++ hooks
+;; (add-hook 'c++-mode-hook 'my:ac-header-init)
+;; (add-hook 'c-mode-hook 'my:ac-header-init)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(display-time-mode t)
+ '(org-agenda-files
+   (quote
+    ("~/workbench/CPROG/massive.c" "~/emacs_workbench/todo.org")))
+ '(package-selected-packages
+   (quote
+    (auto-complete-c-headers auto-complete slime yasnippet htmlize org-edna org))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(eww-form-textarea ((t (:background "#C0C0C0" :foreground "dark gray" :box 1)))))
+;; for turning yes to y and no to n
+(fset 'yes-or-no-p 'y-or-n-p)
+;; clock in the modline
+(display-time-mode 1)
+;; In my world, sentences end with a single space. This makes
+;; sentence navigation commands work for me.
+
+;; #+BEGIN_SRC emacs-lisp :tangle yes
+(setq sentence-end-double-space nil)
+;; #+END_SRC                                                                           
+;; using the clipboard
+
+(load-file "/home/majhi/.emacs.d/xclip.el")
+
+;; yas
+
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;;
+
+;; You can get Emacs to automatically open your agenda whenever you start it. Add the following lines to your =~/.emacs.d/init.el= file:
+
+;; ;; #+begin_src emacs-lisp
+;; (org-agenda nil "a")
+;; ;; #+end_src
+;; to turn off the menu bar
+;; (menu-bar-mode -1) // but i prefer the menu while in x
+;; to turn the menu one again
+(menu-bar-mode 1) ;; i hated the tool bar
+;; no org-babel execute function for c or sh or bash
+(org-babel-do-load-languages
+ 'org-babel-load-languages '((sh . t)(C . t)(java . t)(python . t)))
+;; apparently this is old
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages '((shell . t)(C . t)(java . t)))
+
+
+;; fontify code in code blocks
+(setq org-src-fontify-natively t)
+;; my-abbrev.el at .emacs.d/lisp/my-abbrev.el
+;; (load "~/.emacs.d/lisp/my-abbrev.el")
+;; this is to wrap long lines to fit the display, just do mx toggle-truncate-lines
+;; (toggle-truncate-lines 1)
+
+(toggle-truncate-lines 0)
+;; eww background color fix
+(setq shr-color-visible-luminance-min 70)
+
+
+* .elinks/elinks.conf
+
+
+set document.uri_passing.majhi_elinks_page_dump = "majhi_elinks_page_dump %c"
+#set document.uri_passing = " elinks --dump-width 2000 %c | awk 'NF>=12'  |less "
+
+ ############################################################
+ ############################################################
+
+
+ #bind "main" "HERE GOES YOUR SHORTCUT KEY" = "tab-external-command"
+
+ ############################################################
+ ############################################################
+
+ bind "main" "," = "tab-external-command"
+##############################################################################
+ ############################################################
+ ############################################################
+
+# This is to open the link in a new tab, and use the < and > keys to switch tabs
+
+ bind "main" "p" = "open-link-in-new-tab"
+
+     set document.cache.ignore_cache_control = 1
+
+    set ui.clock.enable = 1
+
+
+
+# set protocol.http.user_agent = "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:22.0) Gecko/20100101 Firefox/23.0"
+
+# set protocol.http.user_agent = "ELinks/0.12pre6 (textmode; Linux; 80x24-2)"
+
+
+# set protocol.http.user_agent = "Mozilla/5.0 (Linux; U; Android 2.2.1; fr-fr; HTC_DesireZ_A7272 Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 "
+
+#set protocol.http.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
+
+set protocol.http.user_agent = "Mozilla/5.0 (X11; Linux x86_64; rv:63.0) Gecko/20100101 Firefox/63.0"
+
+##############################
+# Automatically saved options
+#
+
+## config 
+#  Configuration handling options.
+
+  ## config.saving_style_w [0|1]
+  #  This is internal option used when displaying a warning about obsolete
+  #  config.saving_style. You shouldn't touch it.
+  set config.saving_style_w = 1
+
+
+## document 
+#  Document options.
+
+  ## document.browse 
+  #  Document browsing options (mainly interactivity).
+
+    ## document.browse.links 
+    #  Options for handling of links to other documents.
+
+      ## document.browse.links.numbering [0|1]
+      #  Display numbers next to the links.
+      set document.browse.links.numbering = 1
+
+
+
+
+## ui 
+#  User interface options.
+
+  ## ui.language <language>
+  #  Language of user interface. 'System' means that the language will be
+  #  extracted from the environment dynamically.
+  set ui.language = "System"
+
+
+
+
+
+##################################
+# Automatically saved keybindings
+#
+
+bind "main" "r" = "reload"
+
+
+
+##############################
+# Automatically saved options
+#
+
+## terminal 
+#  Terminal options.
+
+  ## terminal.linux 
+  #  Options specific to this terminal type (according to $TERM value).
+
+    ## terminal.linux.colors <num>
+    set terminal.linux.colors = 0
+
+
+##############################################################################
+# ssl errors
+set connection.ssl.cert_verify = 0
+
+
+##############################
+# Automatically saved options
+#
+
+## document 
+#  Document options.
+
+  ## document.colors 
+  #  Default document color settings.
+
+    ## document.colors.use_document_colors <num>
+    #  Use colors specified in document:
+    #  0 is use always the default settings
+    #  1 is use document colors if available, except background
+    #  2 is use document colors, including background. This can
+    #    mostly look very impressive, but some sites will appear
+    #    really ugly. Note, that obviously if the background is
+    #    not black, it will break the behaviour of transparency.
+    set document.colors.use_document_colors = 0
+
+
+
+## terminal 
+#  Terminal options.
+
+  ## terminal.xterm 
+  #  Options specific to this terminal type (according to $TERM value).
+
+    ## terminal.xterm.colors <num>
+    set terminal.xterm.colors = 2
+
+
+
+
+
+##############################
+# Automatically saved options
+#
+
+## document 
+#  Document options.
+
+  ## document.colors 
+  #  Default document color settings.
+
+    ## document.colors.link <color|#rrggbb>
+    #  Default link color.
+    set document.colors.link = "yellow"
+
+
+
