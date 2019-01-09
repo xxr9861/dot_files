@@ -1,10 +1,12 @@
 * .Xdefaults
-
+#+BEGIN_SRC 
 XTerm*metaSendsEscape: true
 XTerm*eightBitInput: false
 XTerm*faceName:xft:monospace:pixelsize=21
-* .screenrc
 
+#+END_SRC
+* .screenrc
+#+BEGIN_SRC 
  defbce on
  defutf8 on
  escape ^]^]
@@ -60,8 +62,10 @@ XTerm*faceName:xft:monospace:pixelsize=21
 #                prompt
 
 
-* XTerm
+#+END_SRC
 
+* XTerm
+#+BEGIN_SRC 
 XTerm*Background: black
 XTerm*Foreground: white
 XTerm*saveLines: 1000
@@ -70,8 +74,10 @@ XTerm*geometry: +50+100
 XTerm*metaSendsEscape: true
 
 
-* .emacs
+#+END_SRC
 
+* .emacs
+#+BEGIN_SRC lisp 
 					;start package.el with emacs
 (require 'package)
                                         ; add melpa to repository list
@@ -168,9 +174,11 @@ XTerm*metaSendsEscape: true
 ;; eww background color fix
 (setq shr-color-visible-luminance-min 70)
 
+#+END_SRC
+
 
 * .elinks/elinks.conf
-
+#+BEGIN_SRC 
 
 set document.uri_passing.majhi_elinks_page_dump = "majhi_elinks_page_dump %c"
 #set document.uri_passing = " elinks --dump-width 2000 %c | awk 'NF>=12'  |less "
@@ -328,4 +336,6 @@ set connection.ssl.cert_verify = 0
     set document.colors.link = "yellow"
 
 
+
+#+END_SRC
 
